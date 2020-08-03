@@ -1,20 +1,31 @@
-import java.nio.file.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 public class TaskOne {
-    public static void main(String[] args) {
+    private static String content = "";
 
-        //Creating the Path object using the static method get() of Paths class;
-        Path testFilePath = Paths.get("/home/Max/TaskOne.txt");
+    public static void readFileContent(String path) {
+        Path filePath = Paths.get(path);
 
-        //Info about the file;
-        System.out.println("Printing file information: ");
-        System.out.println("\t file name: " + testFilePath.getFileName());
-        System.out.println("\t root of the path: " + testFilePath.getRoot());
-        System.out.println("\t parent of the target: " + testFilePath.getParent());
+        try (Stream<String> lines = Files.lines(filePath)) {
+            lines.forEach(line -> content += line + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        //Return the path elements;
-        System.out.println("Printing elements of the path: ");
-        for (Path element : testFilePath) {
-            System.out.println("\t path element: " + element);
+    public static void writeFileContent(String path) {
+        Path filePath = Paths.get(path);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+            writer.write(content);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
